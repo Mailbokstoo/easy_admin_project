@@ -8,6 +8,29 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+// #[ApiResource(
+//     normalizationContext: ['groups' => ['get']],
+//     denormalizationContext: ['groups' => ['post']],
+//     denormalizationContext: ['groups' => ['put']],
+// )]
+
+#[ApiResource(operations: [
+    new Post(normalizationContext: ['groups' => ['post']]),
+    new Get(normalizationContext: ['groups' => ['get']]),
+    new GetCollection(normalizationContext: ['groups' => ['getList']]),
+    ],
+    paginationEnabled: false
+)]
+//     normalizationContext: ['groups' => ['get']],
+//     denormalizationContext: ['groups' => ['post']],
+//     denormalizationContext: ['groups' => ['put']],
+// )]
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -26,24 +49,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[Groups(['get','getList'])]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Groups(['post', 'get','getList'])]
     #[ORM\Column(length: 60)]
     private ?string $prenom = null;
 
+    #[Groups(['post', 'get','getList'])]
     #[ORM\Column(length: 60)]
     private ?string $nom = null;
 
+    #[Groups(['get'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse = null;
 
+    #[Groups(['get'])]
     #[ORM\Column(nullable: true)]
     private ?int $code_postal = null;
 
+    #[Groups(['get','getList'])]
     #[ORM\Column(length: 60, nullable: true)]
     private ?string $ville = null;
 
+    #[Groups(['post', 'get'])]
     #[ORM\Column(length: 60, nullable: true)]
     private ?string $telephone = null;
 

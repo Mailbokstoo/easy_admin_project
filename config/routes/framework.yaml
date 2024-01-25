@@ -1,3 +1,5 @@
+assets:
+    path: '/api'
 when@dev:
     _errors:
         resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
